@@ -12,6 +12,7 @@ Empty
 
 ## Usage
 ```bash
+npm run-script start
 npm run-script build
 ```
 

@@ -1,0 +1,19 @@
+body { margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+#map {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+.filealert {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    margin-bottom: 0;
+    z-index: 3;
+}
+#ex1 .slider-selection {
+	background: #BABABA;
+}

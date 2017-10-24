@@ -13,7 +13,7 @@ App.prototype = {
   },
   getSLF:function(data){
     const parent = this;
-    const requestParameters = {url:IP + "data/demo1.slf",responseType:'arraybuffer'};
+    const requestParameters = {url:IP + "data/ripple.2D.100.slf",responseType:'arraybuffer'};
     
     ajax(requestParameters,function(err,response){
       if(err){throw Error("WARNING: Issue with Selafin File")}

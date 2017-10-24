@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "start": "node server/server.js",
     "build": "browserify src/slfgl.js -t glslify  --standalone slfgl > public/js/slfgl.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

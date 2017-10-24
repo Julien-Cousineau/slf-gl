@@ -63,7 +63,7 @@ SLFGL.prototype = {
     const program = this.meshProgram;
     
     this.indices       = slf.getIndices();
-    this.XYBuffer      = util.createArrayBuffer(gl, slf.ELEMENTXY);
+    this.XYBuffer      = util.createArrayBuffer(gl, slf.TRIXY);
     // console.log(slf.getELEMENTFRAME())
     this.ColorBuffer   = util.createArrayBuffer(gl, slf.getELEMENTFRAME()); 
     this.ElementBuffer = util.createElementBuffer(gl,this.indices);
