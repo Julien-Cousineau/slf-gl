@@ -11,7 +11,9 @@ Empty
 Empty
 
 ## Usage
-Empty
+```bash
+npm run-script build
+```
 
 ## Options
 Empty

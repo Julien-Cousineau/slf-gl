@@ -1,0 +1,39 @@
+{
+  "name": "slf-gl",
+  "version": "0.0.1",
+  "description": "Display selafin files in webgl",
+  "main": "src/slfgl.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "browserify src/slfgl.js -t glslify  --standalone slfgl > public/js/slfgl.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julien-Cousineau/slf-gl.git"
+  },
+  "keywords": [
+    "selafin",
+    "telemac",
+    "webgl"
+  ],
+  "author": "Julien Cousineau <julien.cousineau@google.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Julien-Cousineau/slf-gl/issues"
+  },
+  "homepage": "https://github.com/Julien-Cousineau/slf-gl#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "browserify": "^14.5.0",
+    "compression": "^1.7.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "gl-matrix": "^2.4.0",
+    "glslify": "^6.1.0",
+    "slf-js": "0.0.1"
+  }
+}
