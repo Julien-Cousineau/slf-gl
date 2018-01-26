@@ -1,16 +1,12 @@
 'use strict';
 
-const slf = require('slf-js');
+const slf = require('../../slf-js/src/slf.js');
 const glsl = require('glslify');
-const glmatrix = require("gl-matrix");
 
 const util = require('./util');
 
 const meshvert = glsl.file('./shaders/mesh.vert.glsl');
 const meshfrag = glsl.file('./shaders/mesh.frag.glsl');
-
-
-
 
 /**
  * Create Selafin Object for WebGL - opentelemac.org
@@ -19,183 +15,109 @@ const meshfrag = glsl.file('./shaders/mesh.frag.glsl');
  * @param {Object} options - Optional information
  * @returns {Object} SlfGL - a Selafin object for WebGL
  */
-function SLFGL(canvas,buffer, options){
-  this.initialised(canvas,buffer,options);
-  this.drawScene();
+function SLFGL(gl,buffer, options){
+  this.initialised(gl,buffer,options);
+  // this.drawScene();
 }
 
 SLFGL.prototype = {
     options: {
     keepbuffer: 0,          // kepp buffer in memory
-    debug: 0                // logging level (0, 1 or 2)
-  },
-  initialised:function(canvas,buffer,options){
-    this.canvas = canvas;
-    const gl = this.gl = canvas.getContext("webgl");
+    debug: 0,               // logging level (0, 1 or 2)
+    programs:{points   :{active:false,vertexSource:glsl.file('./shaders/mesh.vert.point.glsl'),fragmentSource:glsl.file('./shaders/mesh.frag.point.glsl'),mode:'POINTS'},
+              wireframe:{active:false,vertexSource:glsl.file('./shaders/mesh.vert.glsl'),fragmentSource:glsl.file('./shaders/mesh.frag.glsl'),mode:'LINES'},
+              surface  :{active:true,vertexSource:glsl.file('./shaders/mesh.vert.glsl'),fragmentSource:glsl.file('./shaders/mesh.frag.glsl'),mode:'TRIANGLES'},
+              contours :{active:false,vertexSource:glsl.file('./shaders/mesh.vert.glsl'),fragmentSource:glsl.file('./shaders/mesh.frag.glsl'),mode:'TRIANGLES'},
+              contoursL:{active:false,vertexSource:glsl.file('./shaders/mesh.vert.glsl'),fragmentSource:glsl.file('./shaders/mesh.frag.glsl'),mode:'TRIANGLES'},
+             },
+    },
+  programsList:['points','wireframe','surface','contours','contoursL'],
+  
+  initialised:function(gl,buffer,options){
+    const debug = this.options.debug;
+    this.options = extend(Object.create(this.options), options);
+    this.slf = new slf(buffer,options);
+    
+    this.gl = gl;
     gl.getExtension('OES_element_index_uint');
     
-    // Only continue if WebGL is available and working
-    if (!gl) {
-      alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-      return;
-    }
-
-    this.slf = new slf(buffer,options);
-    this.options = extend(Object.create(this.options), options);
-    
-    let debug = this.options.debug;
+    if (!gl) alert("Unable to initialize WebGL. Your browser or machine may not support it.");
     
     if (debug) console.time('Initialised slfGL');
-    this.meshProgram = util.createProgram(gl, meshvert, meshfrag);
+    // this.meshProgram = util.createProgram(gl, meshvert, meshfrag);
+    // TODO : add multiple programs to support different rendering (point, wireframe,surfrace,filled contours,etc...)
+    this.initializePrograms();
     this.initialisedBuffer();
-    this.initialisedView();
-    
-    
-
-    
     if (debug) console.timeEnd('Initialised slfGL');
   
   
   },
-  initialisedBuffer:function(){
+  initializePrograms:function(){
     const gl = this.gl;
-    const slf = this.slf;
-    const program = this.meshProgram;
-    
-    this.indices       = slf.getIndices();
-    this.XYBuffer      = util.createArrayBuffer(gl, slf.TRIXY);
-    // console.log(slf.getELEMENTFRAME())
-    this.ColorBuffer   = util.createArrayBuffer(gl, slf.getELEMENTFRAME()); 
-    this.ElementBuffer = util.createElementBuffer(gl,this.indices);
-    this.colorTexture  = util.createTexture(this.gl, this.gl.LINEAR, getColorRamp(defaultRampColors), 32, 32);
-    
-    util.bindArrayAttribute(gl, this.XYBuffer, program.a_pos, 3);
-    util.bindArrayAttribute(gl, this.ColorBuffer, program.a_data, 1);
-    util.bindElementAttribute(gl, this.ElementBuffer);
-    util.bindTexture(gl, this.colorTexture, 0);
-  },
-  initialisedView:function(){
-    this.u_matrix = glmatrix.mat4.create();
-    this.v_matrix = glmatrix.mat4.create();
-    glmatrix.mat4.translate(this.v_matrix,this.v_matrix,[0,0,-10.0]);
-    this.perspectiveview = {
-      fieldOfView : 45 * Math.PI / 180,
-      aspect : this.gl.canvas.clientWidth / this.gl.canvas.clientHeight,
-      zNear : 0.01,
-      zFar : 1000.0
-    };
-    this.changePView();
-    this.changeMView(0,0,0);
-  },
-  changePView:function(perspectiveview){
-    const gl = this.gl;
-    const u_matrix = this.u_matrix;
-    const canvas = this.gl.canvas;
-    
-    // Lookup the size the browser is displaying the canvas.
-    canvas.width  = (canvas.width  != canvas.clientWidth) ? canvas.clientWidth:canvas.width;
-    canvas.height = (canvas.height  != canvas.clientHeight) ? canvas.clientHeight:canvas.height;
-    
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    
-    const pv  = this.perspectiveview = extend(Object.create(this.perspectiveview), perspectiveview);
-    pv.aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    
-    glmatrix.mat4.perspective(u_matrix,pv.fieldOfView,pv.aspect,pv.zNear,pv.zFar);
-    
-    this.drawScene();
-  },
-  changeMView:function(x,y,z){
-    const gl = this.gl;
-    const u_matrix = this.u_matrix;
-    const v_matrix = this.v_matrix;
-    
-    const vec3 = glmatrix.vec3.create();
-    glmatrix.mat4.getTranslation(vec3, v_matrix);
-    
-    const u_matrixI = glmatrix.mat4.create();
-    glmatrix.mat4.invert(u_matrixI,u_matrix);
-    
-    const maxz = 100.;
-    const miz = 1.;
-    const scaleZ = vec3[2];
-    const scaleZI = -vec3[2];
-    const newx = scaleZ * u_matrixI[0] * 2 * x / gl.canvas.clientWidth;
-    const newy = scaleZ * u_matrixI[5] * 2 * y / gl.canvas.clientHeight;
-    
-
-    const factor = (Math.pow(scaleZI,2.)/(Math.pow(scaleZI,2.)+100.))/10.;
-    z = z*factor;
-    z = (scaleZ+z<-maxz) ? 0:z;
-    z = (scaleZ+z>-miz) ? 0:z;
-    
-    glmatrix.mat4.translate(v_matrix,v_matrix,[-newx, newy, z]);
-    this.drawScene();
-  },
-  updateFrame:function(value){
-    const gl = this.gl;
-    const slf = this.slf;    
-    const program = this.meshProgram;
-    
-    this.ColorBuffer   = util.createArrayBuffer(gl, slf.getELEMENTFRAME(value)); 
-    util.bindArrayAttribute(gl, this.ColorBuffer, program.a_data, 1);
-    this.drawScene();
-  },
-  drawScene:function(){
-    const gl = this.gl;
-    const slf = this.slf;
-    const program = this.meshProgram;
-    const u_matrix = this.u_matrix;
-    const v_matrix = this.v_matrix;
-    const indices = this.indices;
-    
-    this.clearScence();
-
-    gl.useProgram(program.program);
-    
-    gl.uniform1i(program.u_color_ramp, 0);
-    gl.uniform2fv(program.u_minmax,slf.minmax);
-    gl.uniformMatrix4fv(program.u_matrix,false, u_matrix);
-    gl.uniformMatrix4fv(program.v_matrix,false, v_matrix);
-    
-    gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_INT,0);
-  },
-  clearScence:function(){
-    const gl = this.gl;
-    // Set clear color to black, fully opaque
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clearDepth(1.0);                 // Clear everything
-    gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-    gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-    // Clear the canvas before we start drawing on it.
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  },
-  dummycolor:function(){
-    const slf = this.slf;
-    let n = slf.NELEM3*3*4;
-    let dummy =new Float32Array(n);
-    
-    for(let i=0;i<n;i+=12){
-      dummy[i]=1.0;
-      dummy[i+1]=0.0;
-      dummy[i+2]=0.0;
-      dummy[i+3]=1.0;
-      
-      dummy[i+4]=0.0;
-      dummy[i+5]=1.0;
-      dummy[i+6]=0.0;
-      dummy[i+7]=1.0;
-      
-      dummy[i+8]=0.0;
-      dummy[i+9]=0.0;
-      dummy[i+10]=1.0;
-      dummy[i+11]=1.0;
+    let programs = this.options.programs;
+    for (const key of Object.keys(programs)) {
+      programs[key] = extend(Object.create(programs[key]), util.createProgram(gl, programs[key]['vertexSource'], programs[key]['fragmentSource']));
     }
-    return dummy;
+    this.programs = programs;
   },
+  initialisedBuffer:function(){
+    const gl  = this.gl;
+    const slf = this.slf;
+    
+    const indices      = slf.IKLE3F;
+    const indicesW     = slf.IKLEW;
+    this.indicesCount  = indices.length;
+    this.indicesWCount = indicesW.length;
+    
+    this.XYBuffer      = util.createArrayBuffer(gl, slf.XY);
+    this.currentFrame  =slf.getFrame();
+    this.ColorBuffer   = util.createArrayBuffer(gl,this.currentFrame); 
+    this.minmax        = new Float32Array([slf.minmax[0],slf.minmax[1]]);
+    this.ElementBuffer = util.createElementBuffer(gl,indices);
+    this.ElementBufferW= util.createElementBuffer(gl,indicesW);
+    this.getColorTexture();
+    // this.colorTexture  = util.createTexture(this.gl, this.gl.LINEAR, getColorRamp(defaultRampColors), 32, 32);
+    
+  },
+  getColorTexture:function(paint){
+    const colors = (typeof paint!=="undefined") ? paint:defaultRampColors;
+    const colorramp=getColorRamp(colors);
+    this.colorTexture  = util.createTexture(this.gl, this.gl.LINEAR, colorramp, 32, 32);
+  },
+  updateFrame:function(iframe,ivar){
+    const gl = this.gl;
+    const slf = this.slf;
+    this.currentFrame  =slf.getFrame(iframe,ivar);
+    this.minmax        = new Float32Array([slf.minmax[ivar * 2],slf.minmax[ivar * 2 + 1]]);
+    this.ColorBuffer   = util.createArrayBuffer(gl,this.currentFrame);
+  },
+  drawScene:function(worldSize,projMatrix){
+    const gl       = this.gl;
+    const u_matrix = new Float32Array(projMatrix);
+    
+    for (const name in this.programs) {
+      const program = this.programs[name];
+      if(program.active){
+        gl.useProgram(program.program);
+        util.bindArrayAttribute(gl, this.XYBuffer, program.a_pos, 3);
+        util.bindArrayAttribute(gl, this.ColorBuffer, program.a_data, 1);
+        util.bindTexture(gl, this.colorTexture, 0);
 
+        if(name!=='wireframe')util.bindElementAttribute(gl, this.ElementBuffer);
+        if(name==='wireframe')util.bindElementAttribute(gl, this.ElementBufferW);
+        const count = (name!=='wireframe') ? this.indicesCount : this.indicesWCount;
 
-  
+    
+        gl.uniform1i(program.u_color_ramp, 0);
+        gl.uniform2fv(program.u_minmax,this.minmax);
+        gl.uniform1f(program.worldSize, worldSize);
+        gl.uniformMatrix4fv(program.u_matrix,false, u_matrix);
+        // gl.lineWidth(2.0);
+        gl.drawElements(gl[program.mode],count,gl.UNSIGNED_INT,0);
+        gl.useProgram(null);
+      }
+    }
+  },
 };
 
 function getColorRamp(colors) {

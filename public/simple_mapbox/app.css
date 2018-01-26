@@ -1,0 +1,26 @@
+body { margin: 0; padding: 0; }
+html, body { height: 100%; }
+#map {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+canvas {
+    margin:0;
+    padding:0;
+    width: 200px;
+    height: 200px;
+}
+
+.filealert {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    margin-bottom: 0;
+    z-index: 3;
+}
+#ex1 .slider-selection {
+	background: #BABABA;
+}

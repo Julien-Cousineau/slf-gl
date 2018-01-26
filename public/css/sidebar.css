@@ -1,0 +1,307 @@
+:root {
+  --sideBarWidthIndex: 1;
+  --sideBarWidth: calc(var(--sideBarWidthIndex) * 360px);
+  --sideBarIcon:26px;
+}
+.filtercontainer {
+  text-align: center !important;    
+}
+.filterContainerc {  
+  display:inline  !important;
+}
+.pagination>.active>a {
+  z-index: auto;
+}
+table {
+    /*width: auto !important;*/
+}
+.colorpicker {
+  width: 155px !important;
+}
+.checkbox1 {
+  /*width: 40px !important;*/
+}
+.paintview input {
+  display: none !important;
+}
+.paintview .input-group-addon {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+  border-width: 0;
+}
+tr.shown .btn-primary {
+  
+}
+.btn-circle.btn-xs {
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  padding: 3px 0;
+  font-size: 6px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+  border-width: 0;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+  border-width: 0;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+  border-width: 0;
+}
+.checkbox, .radio {
+    position: relative;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.dropdown-menu {
+    min-width: 100px;
+    padding: 5px;
+    text-align:left;
+  
+}
+
+div.dataTables_scrollHeadInner{
+  width: 100% !important;
+}
+table.dataTable {
+  width: 100% !important;
+}
+.mycontent .row {
+     margin-right: 0px; 
+     margin-left: 0px; 
+}
+.mycontent .row .col-sm-12{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+  width: 110px;
+}
+
+div.dataTables_wrapper div.dataTables_filter {
+  text-align: center;
+  margin: 0 auto;
+  display:inline;
+}
+div.dataTables_wrapper div.dataTables_info {
+  text-align: center;
+  margin: 0 auto;
+}
+.dataTables_length,.dataTables_paginate, .paging_simple_numbers {
+  text-align: center !important;;
+}
+
+.accordion-content {
+    padding: 5px;
+    box-sizing: content-box;
+}
+.prop-content {
+  padding-right: 30px;
+  
+}
+
+.mycontainer {
+  z-index:1;
+  position: absolute;  
+  top: 0;
+  bottom:0;
+  right:0px;  
+  width:calc(var(--sideBarWidth));
+  overflow:hidden;
+}
+
+.sideBarIconContainer {
+    z-index: 1;
+    position: absolute;
+    right:  var(--sideBarWidth);
+    bottom:0;
+    opacity: 0.5;
+    padding: 15px 15px 0;
+    margin: 0;
+    cursor: pointer;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+
+}
+.sideBarIcon {
+    font-size: var(--sideBarIcon);
+    top: calc(50% - var(--sideBarIcon) * 0.5);
+
+}
+
+
+.accordion {
+    -webkit-box-shadow: 0px 75px 35px -55px rgba(10, 30, 65, 0.6);
+    -moz-box-shadow: 0px 75px 35px -55px rgba(10, 30, 65, 0.6);
+    box-shadow: 0px 75px 35px -55px rgba(10, 30, 65, 0.6);
+    font-family: Arial, Helvetica, sans-serif;
+    border-color: #505050;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 8px;
+    margin: 0 auto;
+    height: 100%;
+    width: var(--sideBarWidth);
+    overflow:hidden;
+  
+}
+
+.accordion > ul > li,
+.accordion-title,
+.accordion-content,
+.accordion-separator {
+    float: left;
+}
+
+.accordion > ul > li {
+    background-color: #1f1f1f;
+    margin-right: calc(62px - var(--sideBarWidth));
+    margin-bottom: -0px;
+  
+}
+
+.accordion-select:checked ~ .accordion-separator {
+    margin-right: calc(var(--sideBarWidth) - 62px);
+    margin-bottom: 0px;
+}
+
+.accordion-title,
+.accordion-select  {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    width: 30px;   
+    font-size: 15px;
+}
+
+.accordion-title span {
+    margin-bottom: 20px; 
+    margin-left: 20px;
+}
+
+.accordion-select:hover ~ .accordion-title,
+.accordion-select:checked ~ .accordion-title {
+    background-color: #3068cc;
+}
+
+.accordion-title span  {	
+    transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -ms-writing-mode: lr-bt;
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    margin-left: 0px;
+    line-height: 30px;
+}
+
+.accordion-content {
+    background-color: #F7F7F7;    
+    width: calc(var(--sideBarWidth) - 72px);
+    padding: 5px;
+}
+
+.accordion-title,
+.accordion-select:checked ~ .accordion-content {
+    margin-right: 1px;
+    margin-bottom: 1px;
+}
+
+/* Do not change following properties, they aren't 
+generated automatically and are common for each slider. */
+.accordion {
+    overflow: hidden;
+}
+
+.accordion > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 101%;
+}
+
+.accordion > ul > li,
+.accordion-title {
+    position: relative;
+}
+
+.accordion-select {
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    margin: 0;
+    z-index: 1;
+}
+
+.accordion-title span {
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.accordion-content {
+    position: relative;
+    overflow: auto;
+}
+
+.accordion-separator {
+    transition: margin 0.5s;
+    -o-transition: margin 0.5s;
+    -moz-transition: margin 0.5s;
+    -webkit-transition: margin 0.5s;
+}
+.mycontainer,
+.accordion,
+.accordion-title,.accordion-select,
+.accordion > ul > li,
+.accordion-content,
+.mycontent {
+  -webkit-transition: width 0.5s; 
+  transition: width 0.5s; 
+}
+.accordion-select,
+.accordion > ul > li{
+  -webkit-transition: margin 0.5s;
+  transition: margin 0.5s;
+}
+.accordion > ul {
+  position:absolute;
+  top:0;
+  bottom:0;
+}
+.accordion > ul > li,
+.accordion-select,
+.accordion-title,
+.accordion-content,
+.accordion-separator {
+    height:100%
+}
+.accordion-content {
+    height:calc(100% - 10px);
+}

@@ -7,6 +7,7 @@ function App(){
 App.prototype = {
   initialised:function(canvas,buffer,options){
     this.canvas = document.querySelector("#map");
+    this.gl = this.canvas.getContext("webgl");
     this.getSLF();
     this.onResizeWindow();
     this.initialisedHandles();
@@ -17,7 +18,8 @@ App.prototype = {
     
     ajax(requestParameters,function(err,response){
       if(err){throw Error("WARNING: Issue with Selafin File")}
-      parent.slfgl = new slfgl(parent.canvas,response.data,{keepbuffer:1,debug:0});
+      
+      parent.slfgl = new slfgl(parent.gl,response.data,{keepbuffer:1,debug:0});
       $("body").append(html_alertGreen);
       // Instantiate a slider
       var mySlider = $("#ex1").bootstrapSlider();

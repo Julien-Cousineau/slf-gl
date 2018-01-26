@@ -1,0 +1,154 @@
+.parentcontainer .header {
+  z-index:5;
+}
+.parentcontainer .header .btn-group-justified {
+  z-index:4;
+}
+.parentcontainer .graph {
+  position:absolute;
+  top:34px;
+  bottom:0;
+  width:100%;
+  padding-left:60px;
+}
+.parentcontainer .bar text {
+  fill: white;
+  font: 12px sans-serif;
+}
+.parentcontainer .yaxis {
+  background: blue; 
+}
+
+.parentcontainer {
+  /*width:400px;*/
+  background-color:#f3f3f3;
+  position:relative;
+  /*margin:50px;*/
+  overflow:hidden;
+  height:234px;
+
+}
+.parentcontainer .childcontainer {
+/*   position:relative; */
+  transition: all 500ms;
+  height:200px;
+  float:left;
+  	
+/* 	transform: translateY(-100%); */
+/*   transition: transform 300ms linear; */
+}
+.parentcontainer #colorcontainer2 {
+  top:200px;
+/*   width:200px; */
+/*   height:100px; */
+  background:blue;
+    
+}
+
+.parentcontainer .sliderContainer {
+  padding:10px 0px;  
+}
+.parentcontainer .slider.slider-vertical{
+ height:175px !important;
+ }
+
+.parentcontainer #ex4Slider .slider-selection {
+	background: #BABABA;
+}
+.parentcontainer .selectcolorcontainer  input[type="checkbox"] {
+    display: none;
+}
+
+
+.parentcontainer .selectcolorcontainer {
+  width:50px;
+  background-color:white;
+  height:100%;
+  padding:5px 15px;
+  z-index:3;
+  position:relative;
+  float:left;
+/*   position:relative; */
+}
+.parentcontainer .selectcolorbutton {
+  height:100%;
+  width:100%;
+  padding:0px;
+  border-radius:5px;
+  
+}
+.parentcontainer .selectcolorcontainer  input[type="checkbox"]:checked + .selectcolorbutton {  
+  border:1px solid black;
+/*   box-shadow: inset 0px 0px 0px 0px rgb(255, 255, 255); */
+}
+.parentcontainer .selectcolorbutton:hover {
+  opacity:0.9;
+}
+.parentcontainer .colordetail {
+  width: 350px;
+  height:100%;
+  background-color:white;
+/*   margin-left:30px; */
+  padding:5px;
+  transition: all 500ms linear;
+  position: relative;
+  /*left:0px;*/
+  left:-100%;
+  float:left;
+}
+.parentcontainer .row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.parentcontainer .navbar-form {
+  margin: 0px;
+  padding: 0px;
+}
+
+.parentcontainer .colorgroup .btn {
+  padding:5px 2px;
+  background-color:white;
+  margin:0px;
+}
+.parentcontainer .colorgroup .btn.active {
+  box-shadow: inset 0px 0px 20px 1px rgba(150,150,255,0.5);
+}
+
+.parentcontainer .colorgroup .colorbtn {
+  background-color:red;
+  width:auto;
+  height:22px;
+  border-radius:5px;
+}
+.parentcontainer .colorpanels {
+  margin-right: 0px;
+  margin-left: 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height:100px;  
+}
+.parentcontainer .colorpanels span {
+  font-size: 10px;
+  font-weight: 900;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap ;
+  margin: 0px -50px;
+  overflow:hidden;
+}
+.parentcontainer .colorpanel {
+  float: left; 
+  width: 29px; 
+  text-align: center;
+  height:100px;
+  line-height: 100px;
+  position:relative;
+}
+.parentcontainer .colorpanel:hover {
+  opacity:0.8;
+  cursor:pointer;
+}
+.parentcontainer .colorpanel .spancontainer {
+  transform:rotate(-90deg);
+  pointer-events: none;
+}

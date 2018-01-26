@@ -1,0 +1,13 @@
+#map {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--bannermargin) + var(--headerH));
+    bottom: 0;
+}
+.mapboxgl-ctrl-bottom-left {
+    display: none;
+}
+.mapboxgl-ctrl-bottom-right {
+    display: none;
+}

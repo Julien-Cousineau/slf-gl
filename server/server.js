@@ -16,9 +16,15 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'));
+app.get('/simple', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/simple/index.html'));
 });
+// app.get('/simplemb', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../public/simple_mapbox/index.html'));
+// });
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../public/simple/index.html'));
+// });
 
 
 const PORT = 8080;
